@@ -48,6 +48,7 @@ REQUEST_DENIED = '\xd3'
 STANDBY_SCAN = '\xd4'
 RAW_VALUE = '\x80'
 
+
 class NeuroPy(object):
     """NeuroPy libraby, to get data from neurosky mindwave.
     Initialising: object1=NeuroPy("COM6",57600) #windows
@@ -80,13 +81,14 @@ class NeuroPy(object):
 
     callBacksDictionary = {}  # keep a track of all callbacks
 
-    def __init__(self, port = None, baudRate=57600, devid=None):
+    def __init__(self, port=None, baudRate=57600, devid=None):
         if port == None:
             platform = sys.platform
             if platform == "win32":
                 port = "COM6"
             elif platform.startswith("linux") or platform == 'darwin':
                 port = "/dev/rfcomm0"
+                print("in init only" + port)
 
         self.__devid = devid
         self.__serialPort = port
@@ -105,26 +107,41 @@ class NeuroPy(object):
     def disconnect(self):
         self.__srl.write(DISCONNECT)
 
+    # def connect(self):
+    #     if not self.__devid:
+    #         self.__connected = True
+    #         return # Only connect RF devices
+
+    #     self.__srl.write(''.join([CONNECT, self.__devid.decode('hex')]))
+
     def connect(self):
         if not self.__devid:
             self.__connected = True
-            return # Only connect RF devices
+            return  # Only connect RF devices
 
-        self.__srl.write(''.join([CONNECT, self.__devid.decode('hex')]))
+        encoded_devid = self.__devid.encode('utf-8')
+
+        self.__srl.write(CONNECT.encode('utf-8') + encoded_devid)
 
     def start(self):
         # Try to connect to serial port and start a separate thread
         # for data collection
         if self.__threadRun == True:
-            print "Mindwave has already started!"
+            print("Mindwave has already started!")
             return
 
         if self.__srl == None:
+            # try:
+            #     self.__srl = serial.Serial(
+            #         self.__serialPort, self.__serialBaudRate)
             try:
                 self.__srl = serial.Serial(
                     self.__serialPort, self.__serialBaudRate)
-            except serial.serialutil.SerialException, e:
-                print str(e)
+            # except serial.serialutil.SerialException, e:
+            #     print str(e)
+            #     return
+            except serial.serialutil.SerialException as e:
+                print(str(e))
                 return
         else:
             self.__srl.open()
@@ -142,11 +159,17 @@ class NeuroPy(object):
     def __packetParser(self):
         "packetParser runs continously in a separate thread to parse packets from mindwave and update the corresponding variables"
         while self.__threadRun:
-            p1 = self.__srl.read(1).encode("hex")  # read first 2 packets
-            p2 = self.__srl.read(1).encode("hex")
+            # p1 = self.__srl.read(1).encode("hex")  # read first 2 packets
+            # p2 = self.__srl.read(1).encode("hex")
+
+            p1 = self.__srl.read(1).hex()  # read first 2 packets
+            p2 = self.__srl.read(1).hex()
+
             while (p1 != 'aa' or p2 != 'aa') and self.__threadRun:
                 p1 = p2
-                p2 = self.__srl.read(1).encode("hex")
+                # p2 = self.__srl.read(1).encode("hex")
+                p2 = self.__srl.read(1).hex()
+
             else:
                 if self.__threadRun == False:
                     break
@@ -154,13 +177,17 @@ class NeuroPy(object):
                 self.__packetsReceived += 1
                 payload = []
                 checksum = 0
-                payloadLength = int(self.__srl.read(1).encode("hex"), 16)
+                # payloadLength = int(self.__srl.read(1).encode("hex"), 16)
+                payloadLength = int(self.__srl.read(1).hex(), 16)
                 for i in range(payloadLength):
-                    tempPacket = self.__srl.read(1).encode("hex")
+                    tempPacket = self.__srl.read(1).hex()
+                    # tempPacket = self.__srl.read(1).encode("hex")
                     payload.append(tempPacket)
                     checksum += int(tempPacket, 16)
                 checksum = ~checksum & 0x000000ff
-                if checksum == int(self.__srl.read(1).encode("hex"), 16):
+                # if checksum == int(self.__srl.read(1).encode("hex"), 16):
+                if checksum == int(self.__srl.read(1).hex(),
+                                   16):  # read checksum byte and compare with calculated checksum
                     i = 0
 
                     while i < payloadLength:
@@ -171,28 +198,28 @@ class NeuroPy(object):
                         elif (code == 'd1'):
                             print("Headset not found, reconnecting")
                             self.connect()
-                        elif(code == 'd2'):
+                        elif (code == 'd2'):
                             print("Disconnected!")
                             self.connect()
-                        elif(code == 'd3'):
+                        elif (code == 'd3'):
                             print("Headset denied operation!")
-                        elif(code == 'd4'):
+                        elif (code == 'd4'):
                             if payload[2] == 0 and not self.__connected:
                                 print("Idle, trying to reconnect");
                                 self.connect();
-                        elif(code == '02'):  # poorSignal
+                        elif (code == '02'):  # poorSignal
                             i = i + 1
                             self.poorSignal = int(payload[i], 16)
-                        elif(code == '04'):  # attention
+                        elif (code == '04'):  # attention
                             i = i + 1
                             self.attention = int(payload[i], 16)
-                        elif(code == '05'):  # meditation
+                        elif (code == '05'):  # meditation
                             i = i + 1
                             self.meditation = int(payload[i], 16)
-                        elif(code == '16'):  # blink strength
+                        elif (code == '16'):  # blink strength
                             i = i + 1
                             self.blinkStrength = int(payload[i], 16)
-                        elif(code == '80'):  # raw value
+                        elif (code == '80'):  # raw value
                             i = i + 1  # for length/it is not used since length =1 byte long and always=2
                             i = i + 1
                             val0 = int(payload[i], 16)
