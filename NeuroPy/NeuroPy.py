@@ -306,7 +306,8 @@ class NeuroPy(object):
     def attention(self, value):
         self.__attention = value
         # if callback has been set, execute the function
-        if self.callBacksDictionary.has_key("attention"):
+        # if self.callBacksDictionary.has_key("attention"):
+        if "attention" in self.callBacksDictionary:
             self.callBacksDictionary["attention"](self.__attention)
 
     # meditation
@@ -319,7 +320,8 @@ class NeuroPy(object):
     def meditation(self, value):
         self.__meditation = value
         # if callback has been set, execute the function
-        if self.callBacksDictionary.has_key("meditation"):
+        # if self.callBacksDictionary.has_key("meditation"):
+        if "meditation" in self.callBacksDictionary:
             self.callBacksDictionary["meditation"](self.__meditation)
 
     # rawValue
@@ -332,7 +334,8 @@ class NeuroPy(object):
     def rawValue(self, value):
         self.__rawValue = value
         # if callback has been set, execute the function
-        if self.callBacksDictionary.has_key("rawValue"):
+        # if self.callBacksDictionary.has_key("rawValue"):
+        if "rawValue" in self.callBacksDictionary:
             self.callBacksDictionary["rawValue"](self.__rawValue)
 
     # delta
@@ -345,7 +348,8 @@ class NeuroPy(object):
     def delta(self, value):
         self.__delta = value
         # if callback has been set, execute the function
-        if self.callBacksDictionary.has_key("delta"):
+        # if self.callBacksDictionary.has_key("delta"):
+        if "theta" in self.callBacksDictionary:
             self.callBacksDictionary["delta"](self.__delta)
 
     # theta
@@ -358,7 +362,8 @@ class NeuroPy(object):
     def theta(self, value):
         self.__theta = value
         # if callback has been set, execute the function
-        if self.callBacksDictionary.has_key("theta"):
+        # if self.callBacksDictionary.has_key("theta"):
+        if "theta" in self.callBacksDictionary:
             self.callBacksDictionary["theta"](self.__theta)
 
     # lowAlpha
@@ -371,7 +376,8 @@ class NeuroPy(object):
     def lowAlpha(self, value):
         self.__lowAlpha = value
         # if callback has been set, execute the function
-        if self.callBacksDictionary.has_key("lowAlpha"):
+        # if self.callBacksDictionary.has_key("lowAlpha"):
+        if "lowAlpha" in self.callBacksDictionary:
             self.callBacksDictionary["lowAlpha"](self.__lowAlpha)
 
     # highAlpha
@@ -384,7 +390,8 @@ class NeuroPy(object):
     def highAlpha(self, value):
         self.__highAlpha = value
         # if callback has been set, execute the function
-        if self.callBacksDictionary.has_key("highAlpha"):
+        # if self.callBacksDictionary.has_key("highAlpha"):
+        if "highAlpha" in self.callBacksDictionary:
             self.callBacksDictionary["highAlpha"](self.__highAlpha)
 
     # lowBeta
@@ -397,7 +404,8 @@ class NeuroPy(object):
     def lowBeta(self, value):
         self.__lowBeta = value
         # if callback has been set, execute the function
-        if self.callBacksDictionary.has_key("lowBeta"):
+        # if self.callBacksDictionary.has_key("lowBeta"):
+        if "lowBeta" in self.callBacksDictionary:
             self.callBacksDictionary["lowBeta"](self.__lowBeta)
 
     # highBeta
@@ -410,7 +418,8 @@ class NeuroPy(object):
     def highBeta(self, value):
         self.__highBeta = value
         # if callback has been set, execute the function
-        if self.callBacksDictionary.has_key("highBeta"):
+        # if self.callBacksDictionary.has_key("highBeta"):
+        if "highBeta" in self.callBacksDictionary:
             self.callBacksDictionary["highBeta"](self.__highBeta)
 
     # lowGamma
@@ -423,7 +432,8 @@ class NeuroPy(object):
     def lowGamma(self, value):
         self.__lowGamma = value
         # if callback has been set, execute the function
-        if self.callBacksDictionary.has_key("lowGamma"):
+        # if self.callBacksDictionary.has_key("lowGamma"):
+        if "lowGamma" in self.callBacksDictionary:
             self.callBacksDictionary["lowGamma"](self.__lowGamma)
 
     # midGamma
@@ -436,7 +446,8 @@ class NeuroPy(object):
     def midGamma(self, value):
         self.__midGamma = value
         # if callback has been set, execute the function
-        if self.callBacksDictionary.has_key("midGamma"):
+        # if self.callBacksDictionary.has_key("midGamma"):
+        if "midGamma" in self.callBacksDictionary:
             self.callBacksDictionary["midGamma"](self.__midGamma)
 
     # poorSignal
@@ -449,7 +460,8 @@ class NeuroPy(object):
     def poorSignal(self, value):
         self.__poorSignal = value
         # if callback has been set, execute the function
-        if self.callBacksDictionary.has_key("poorSignal"):
+        if "poorSignal" in self.callBacksDictionary:
+            # if self.callBacksDictionary.has_key("poorSignal"):
             self.callBacksDictionary["poorSignal"](self.__poorSignal)
 
     # blinkStrength
@@ -462,5 +474,6 @@ class NeuroPy(object):
     def blinkStrength(self, value):
         self.__blinkStrength = value
         # if callback has been set, execute the function
-        if self.callBacksDictionary.has_key("blinkStrength"):
+        # if self.callBacksDictionary.has_key("blinkStrength"):
+        if "blinkStrength" in self.callBacksDictionary:
             self.callBacksDictionary["blinkStrength"](self.__blinkStrength)
