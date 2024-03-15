@@ -4,6 +4,8 @@ NeuroPy library written in python to connect, interact and get data from **Neuro
 
 This library is based on the mindwave mindset communication protocol published by [Neurosky](http:://neurosky.com) and is tested with Neurosky Mindwave EEG headset.
 
+This fork is working on python3 and works with mindwave mobile2 model
+
 ## Installation
 
 1. Download the source distribution (zip file) from [dist directory](https://github.com/lihas/NeuroPy/tree/master/dist) or from [PyPi](https://pypi.python.org/pypi/NeuroPy/0.1)
